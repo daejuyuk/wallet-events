@@ -6,7 +6,7 @@
  "type": "render",
  "url": "https://pay.naver.com/member/notice?categoryCode=EVENT",
  "file": "https://raw.githubusercontent.com/daejuyuk/wallet-events/main/data/sources/npay-notice.json",
- "fetched_at": "2026-11-09T00:35:41+09:00",
+ "fetched_at": "2026-11-09T00:49:29+09:00",
  "ok": true,
  "count": 21,
  "items": [
