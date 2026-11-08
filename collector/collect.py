@@ -182,48 +182,67 @@ def raw_url(rel: str) -> str | None:
     return f"https://raw.githubusercontent.com/{repo}/{branch}/{rel}" if repo else None
 
 
-def main(argv: list[str]) -> int:
-    conf = yaml.safe_load((ROOT / "collector" / "sources.yml").read_text(encoding="utf-8"))
-    only = set(argv)
-    sources = [s for s in conf["sources"] if s.get("enabled", True) and (not only or s["id"] in only)]
-    (OUT / "sources").mkdir(parents=True, exist_ok=True)
-
-    session = requests.Session()
-    session.headers.update({"User-Agent": UA, "Accept-Language": "ko-KR,ko;q=0.9"})
-
-    browser = pw = None
-    if any(s["type"] == "render" for s in sources):
-        from playwright.sync_api import sync_playwright
-        pw = sync_playwright().start()
-        browser = pw.chromium.launch()
-
-    index: dict = {"generated_at": now(), "sources": []}
-    try:
-        for src in sources:
-            rel = f"data/sources/{src['id']}.json"
-            entry = {"id": src["id"], "issuers": src.get("issuers", []), "type": src["type"],
-                     "url": src.get("url") or KB_BASE + KB_PATH, "file": raw_url(rel),
-                     "fetched_at": now()}
-            try:
-                if not allowed(entry["url"]):
-                    raise PermissionError("robots.txt가 수집을 막고 있어 건너뜀")
-                items = HANDLERS[src["type"]](src, session, browser)
-                entry.update(ok=True, count=len(items))
-            except Exception as e:  # 한 사이트가 실패해도 나머지는 계속
-                items = []
-                entry.update(ok=False, count=0, error=f"{type(e).__name__}: {e}"[:300])
-            (ROOT / rel).write_text(json.dumps({**entry, "items": items}, ensure_ascii=False, indent=1),
-                                    encoding="utf-8")
-            index["sources"].append(entry)
-            print(f"[{'ok' if entry['ok'] else 'FAIL'}] {src['id']}: {entry['count']}건 {entry.get('error', '')}")
-    finally:
-        if browser:
-            browser.close()
-        if pw:
-            pw.stop()
-
+def write_index(index: dict) -> None:
+    OUT.mkdir(parents=True, exist_ok=True)
     (OUT / "index.json").write_text(json.dumps(index, ensure_ascii=False, indent=1), encoding="utf-8")
-    return 0 if any(s["ok"] for s in index["sources"]) else 1
+
+
+def main(argv: list[str]) -> int:
+    index: dict = {"generated_at": now(), "sources": []}
+    write_index(index)          # 시작하자마자 한 번 써 둬서, 중간에 죽어도 흔적이 남게
+    try:
+        conf = yaml.safe_load((ROOT / "collector" / "sources.yml").read_text(encoding="utf-8"))
+        only = set(argv)
+        sources = [s for s in conf["sources"] if s.get("enabled", True) and (not only or s["id"] in only)]
+        (OUT / "sources").mkdir(parents=True, exist_ok=True)
+
+        session = requests.Session()
+        session.headers.update({"User-Agent": UA, "Accept-Language": "ko-KR,ko;q=0.9"})
+
+        browser = pw = None
+        if any(s["type"] == "render" for s in sources):
+            try:
+                from playwright.sync_api import sync_playwright
+                pw = sync_playwright().start()
+                browser = pw.chromium.launch()
+            except Exception as e:   # 브라우저가 안 떠도 static/kbcard 소스는 계속
+                index["browser_error"] = f"{type(e).__name__}: {e}"[:300]
+                print("[WARN] 브라우저 실행 실패:", index["browser_error"])
+                browser = None
+
+        try:
+            for src in sources:
+                rel = f"data/sources/{src['id']}.json"
+                entry = {"id": src["id"], "issuers": src.get("issuers", []), "type": src["type"],
+                         "url": src.get("url") or KB_BASE + KB_PATH, "file": raw_url(rel),
+                         "fetched_at": now()}
+                try:
+                    if src["type"] == "render" and browser is None:
+                        raise RuntimeError("브라우저를 띄우지 못해 건너뜀 (browser_error 참고)")
+                    if not allowed(entry["url"]):
+                        raise PermissionError("robots.txt가 수집을 막고 있어 건너뜀")
+                    items = HANDLERS[src["type"]](src, session, browser)
+                    entry.update(ok=True, count=len(items))
+                except Exception as e:  # 한 사이트가 실패해도 나머지는 계속
+                    items = []
+                    entry.update(ok=False, count=0, error=f"{type(e).__name__}: {e}"[:300])
+                (ROOT / rel).write_text(json.dumps({**entry, "items": items}, ensure_ascii=False, indent=1),
+                                        encoding="utf-8")
+                index["sources"].append(entry)
+                write_index(index)      # 소스 하나 끝날 때마다 저장
+                print(f"[{'ok' if entry['ok'] else 'FAIL'}] {src['id']}: {entry['count']}건 {entry.get('error', '')}")
+        finally:
+            if browser:
+                browser.close()
+            if pw:
+                pw.stop()
+    except Exception as e:
+        index["fatal"] = f"{type(e).__name__}: {e}"[:500]
+        print("[FATAL]", index["fatal"])
+
+    index["finished_at"] = now()
+    write_index(index)
+    return 0 if any(s.get("ok") for s in index["sources"]) else 1
 
 
 if __name__ == "__main__":
