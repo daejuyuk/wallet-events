@@ -1,0 +1,48 @@
+# 수집 대상 목록. 새 카드사·페이를 추가하려면 항목 하나만 늘리면 돼요.
+#
+#   id:        파일 이름으로 쓰여요 (영문, 숫자, -)
+#   issuers:   혜택판의 결제수단 종류 id (toss, npay, kb, woori, nh, shinhan ...)
+#              '*'는 모든 카드사 공통 자료(무이자 할부 등)
+#   type:      static  서버가 HTML을 그대로 주는 페이지
+#              render  자바스크립트로 그리는 페이지 (헤드리스 Chrome으로 열어요)
+#              kbcard  KB국민카드 이벤트 목록 전용 (페이지 넘김 + 상세)
+#   follow:    (render 전용) 이 정규식에 맞는 링크를 따라가 상세까지 읽어요
+#   enabled:   false면 건너뜀
+#
+# robots.txt가 수집을 막은 사이트는 자동으로 건너뛰고 index.json에 이유를 남겨요.
+
+sources:
+  - id: tosspay
+    issuers: [toss]
+    type: static
+    url: https://toss.im/tossfeed/article/tosspay-promotion
+
+  - id: npay-notice
+    issuers: [npay]
+    type: render
+    url: https://pay.naver.com/member/notice?categoryCode=EVENT
+    follow: 'pay\.naver\.com/member/notice/\d+'
+    max_follow: 40
+
+  - id: samsung-wallet-naver
+    issuers: [samsung, kb, samsungcard, shinhan]
+    type: static
+    url: https://bridge.swalletevent.com/
+
+  - id: kbcard
+    issuers: [kb, kbpay]
+    type: kbcard
+    max_pages: 15
+    max_details: 150
+
+  - id: installments-inicis
+    issuers: ['*']
+    type: static
+    url: https://www.inicis.com/blog/archives/16302
+
+  # 예시: 새 카드사를 추가할 때 이런 식으로 한 덩어리 늘리면 돼요.
+  # - id: shinhan
+  #   issuers: [shinhan]
+  #   type: render
+  #   url: (신한카드 진행 중 이벤트 목록 주소)
+  #   follow: '(상세 페이지 주소에 공통으로 들어가는 부분)'
