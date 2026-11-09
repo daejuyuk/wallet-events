@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-09T00:49:27+09:00",
+ "generated_at": "2026-11-10T08:39:05+09:00",
  "sources": [
   {
    "id": "tosspay",
@@ -9,7 +9,7 @@
    "type": "static",
    "url": "https://toss.im/tossfeed/article/tosspay-promotion",
    "file": "https://raw.githubusercontent.com/daejuyuk/wallet-events/main/data/sources/tosspay.json",
-   "fetched_at": "2026-11-09T00:49:28+09:00",
+   "fetched_at": "2026-11-10T08:39:05+09:00",
    "ok": true,
    "count": 1
   },
@@ -21,7 +21,7 @@
    "type": "render",
    "url": "https://pay.naver.com/member/notice?categoryCode=EVENT",
    "file": "https://raw.githubusercontent.com/daejuyuk/wallet-events/main/data/sources/npay-notice.json",
-   "fetched_at": "2026-11-09T00:49:29+09:00",
+   "fetched_at": "2026-11-10T08:39:07+09:00",
    "ok": true,
    "count": 21
   },
@@ -36,7 +36,7 @@
    "type": "static",
    "url": "https://bridge.swalletevent.com/",
    "file": "https://raw.githubusercontent.com/daejuyuk/wallet-events/main/data/sources/samsung-wallet-naver.json",
-   "fetched_at": "2026-11-09T00:50:11+09:00",
+   "fetched_at": "2026-11-10T08:39:51+09:00",
    "ok": true,
    "count": 1
   },
@@ -49,7 +49,7 @@
    "type": "kbcard",
    "url": "https://card.kbcard.com/BON/DVIEW/HBBMCXCRVNEC0001",
    "file": "https://raw.githubusercontent.com/daejuyuk/wallet-events/main/data/sources/kbcard.json",
-   "fetched_at": "2026-11-09T00:50:13+09:00",
+   "fetched_at": "2026-11-10T08:39:55+09:00",
    "ok": true,
    "count": 123
   },
@@ -61,10 +61,10 @@
    "type": "static",
    "url": "https://www.inicis.com/blog/archives/16302",
    "file": "https://raw.githubusercontent.com/daejuyuk/wallet-events/main/data/sources/installments-inicis.json",
-   "fetched_at": "2026-11-09T00:54:33+09:00",
+   "fetched_at": "2026-11-10T08:44:26+09:00",
    "ok": true,
    "count": 1
   }
  ],
- "finished_at": "2026-11-09T00:54:35+09:00"
+ "finished_at": "2026-11-10T08:44:28+09:00"
 }
