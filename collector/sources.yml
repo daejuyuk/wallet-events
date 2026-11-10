@@ -51,7 +51,7 @@ sources:
     issuers: [nh]
     type: render
     url: https://card.nonghyup.com/servlet/IPCB010501.menu
-    enabled: false
+    method: post
 
   # 예시: 새 카드사를 추가할 때 이런 식으로 한 덩어리 늘리면 돼요.
   # - id: shinhan

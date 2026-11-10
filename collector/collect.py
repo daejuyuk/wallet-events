@@ -85,6 +85,50 @@ def collect_static(src: dict, session: requests.Session, _browser) -> list[dict]
     return [{"url": src["url"], "title": title, "text": html_text(r.text)[:TEXT_LIMIT]}]
 
 
+def open_page(page, src: dict):
+    """목록 화면을 여는 방법 세 가지. 마지막으로 받은 응답(없으면 None)을 돌려줘요.
+
+    기본         url을 바로 열어요.
+    method: post  start(없으면 url의 첫 화면)를 먼저 연 뒤 url로 POST 이동해요.
+                  주소로 바로 들어가면 405로 거절하는 사이트용.
+    click_path    start(없으면 url)를 연 뒤 적힌 글자의 메뉴를 차례로 눌러 들어가요.
+    """
+    path = src.get("click_path")
+    post = str(src.get("method", "get")).lower() == "post"
+    if not path and not post:
+        return page.goto(src["url"], wait_until="networkidle", timeout=60000)
+
+    home = "{0.scheme}://{0.netloc}/".format(urlparse(src["url"]))
+    first = src.get("start") or (src["url"] if path else home)
+    resp = page.goto(first, wait_until="networkidle", timeout=60000)
+    page.wait_for_timeout(1500)         # 첫 화면이 스크립트로 한 번 더 넘어가는 사이트용
+
+    if post:
+        with page.expect_navigation(wait_until="networkidle", timeout=60000) as nav:
+            page.evaluate(
+                """u => { const f = document.createElement('form'); f.method = 'post';
+                          f.action = u; document.body.appendChild(f); f.submit(); }""",
+                src["url"])
+        return nav.value
+
+    for label in path:
+        exact = re.compile(rf"^\s*{re.escape(str(label))}\s*$")
+        hits = page.locator("a:visible, button:visible").filter(has_text=exact)
+        if hits.count() == 0:
+            raise RuntimeError(f"메뉴 '{label}'을(를) 화면에서 찾지 못함")
+        target = hits.first
+        target.hover(timeout=5000)      # 마우스를 올려야 하위 메뉴가 펼쳐지는 사이트용
+        page.wait_for_timeout(400)
+        target.click(timeout=5000)
+        time.sleep(DELAY)
+        try:
+            page.wait_for_load_state("networkidle", timeout=15000)
+        except Exception:
+            pass
+        resp = None                     # 눌러서 들어간 화면은 응답 코드를 알 수 없어요
+    return resp
+
+
 def click_more(page, src: dict) -> None:
     """'더보기'처럼 목록을 이어 붙이는 버튼을 더 안 나올 때까지 눌러요 (click_more 옵션)."""
     label = src.get("click_more")
@@ -112,7 +156,9 @@ def click_more(page, src: dict) -> None:
 def collect_render(src: dict, _session, browser) -> list[dict]:
     page = browser.new_page(user_agent=UA, locale="ko-KR")
     try:
-        page.goto(src["url"], wait_until="networkidle", timeout=60000)
+        resp = open_page(page, src)
+        if resp is not None and resp.status >= 400:
+            raise RuntimeError(f"HTTP {resp.status} 오류 화면이 열림")
         for _ in range(int(src.get("scrolls", 2))):
             page.mouse.wheel(0, 4000)
             page.wait_for_timeout(800)
