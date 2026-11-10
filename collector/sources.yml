@@ -40,6 +40,16 @@ sources:
     type: static
     url: https://www.inicis.com/blog/archives/16302
 
+  - id: wooricard
+    issuers: [woori]
+    type: render
+    url: https://pc.wooricard.com/dcpc/yh1/bnf/bnf02/prgevnt/H1BNF202S00.do
+
+  - id: nhcard
+    issuers: [nh]
+    type: render
+    url: https://card.nonghyup.com/servlet/IPCB010501.menu
+
   # 예시: 새 카드사를 추가할 때 이런 식으로 한 덩어리 늘리면 돼요.
   # - id: shinhan
   #   issuers: [shinhan]
