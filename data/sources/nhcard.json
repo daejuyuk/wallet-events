@@ -6,14 +6,9 @@
  "type": "render",
  "url": "https://card.nonghyup.com/servlet/IPCB010501.menu",
  "file": "https://raw.githubusercontent.com/daejuyuk/wallet-events/main/data/sources/nhcard.json",
- "fetched_at": "2026-11-11T00:22:38+09:00",
- "ok": true,
- "count": 1,
- "items": [
-  {
-   "url": "https://card.nonghyup.com/servlet/IPCB010501.menu",
-   "title": "HTTP Status 405 – Method Not Allowed",
-   "text": "HTTP Status 405 – Method Not Allowed"
-  }
- ]
+ "fetched_at": "2026-11-11T01:19:21+09:00",
+ "ok": false,
+ "count": 0,
+ "error": "Error: Page.evaluate: TypeError: Cannot read properties of null (reading 'appendChild')\n    at eval (eval at evaluate (:234:30), <anonymous>:2:55)\n    at UtilityScript.evaluate (<anonymous>:241:19)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)",
+ "items": []
 }
