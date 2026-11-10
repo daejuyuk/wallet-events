@@ -85,6 +85,30 @@ def collect_static(src: dict, session: requests.Session, _browser) -> list[dict]
     return [{"url": src["url"], "title": title, "text": html_text(r.text)[:TEXT_LIMIT]}]
 
 
+def click_more(page, src: dict) -> None:
+    """'더보기'처럼 목록을 이어 붙이는 버튼을 더 안 나올 때까지 눌러요 (click_more 옵션)."""
+    label = src.get("click_more")
+    if not label:
+        return
+    exact = re.compile(rf"^\s*{re.escape(label)}\s*$")
+    for _ in range(int(src.get("max_clicks", 10))):
+        buttons = page.locator("a:visible, button:visible").filter(has_text=exact)
+        if buttons.count() == 0:
+            break                       # 버튼이 사라졌으면 끝까지 펼친 것
+        before = len(page.inner_text("body"))
+        try:
+            buttons.last.click(timeout=5000)
+        except Exception:
+            break
+        time.sleep(DELAY)
+        try:
+            page.wait_for_load_state("networkidle", timeout=10000)
+        except Exception:
+            pass
+        if len(page.inner_text("body")) <= before:
+            break                       # 눌러도 내용이 안 늘면 그만
+
+
 def collect_render(src: dict, _session, browser) -> list[dict]:
     page = browser.new_page(user_agent=UA, locale="ko-KR")
     try:
@@ -92,6 +116,7 @@ def collect_render(src: dict, _session, browser) -> list[dict]:
         for _ in range(int(src.get("scrolls", 2))):
             page.mouse.wheel(0, 4000)
             page.wait_for_timeout(800)
+        click_more(page, src)
         items = [{"url": src["url"], "title": page.title(),
                   "text": squash(page.inner_text("body"))[:TEXT_LIMIT]}]
         pattern = src.get("follow")

@@ -44,6 +44,8 @@ sources:
     issuers: [woori]
     type: render
     url: https://pc.wooricard.com/dcpc/yh1/bnf/bnf02/prgevnt/H1BNF202S00.do
+    click_more: '더보기'
+    max_clicks: 10
 
   - id: nhcard
     issuers: [nh]
