@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-11T01:14:10+09:00",
+ "generated_at": "2026-11-11T06:06:51+09:00",
  "sources": [
   {
    "id": "tosspay",
@@ -9,7 +9,7 @@
    "type": "static",
    "url": "https://toss.im/tossfeed/article/tosspay-promotion",
    "file": "https://raw.githubusercontent.com/daejuyuk/wallet-events/main/data/sources/tosspay.json",
-   "fetched_at": "2026-11-11T01:14:11+09:00",
+   "fetched_at": "2026-11-11T06:06:51+09:00",
    "ok": true,
    "count": 1
   },
@@ -21,7 +21,7 @@
    "type": "render",
    "url": "https://pay.naver.com/member/notice?categoryCode=EVENT",
    "file": "https://raw.githubusercontent.com/daejuyuk/wallet-events/main/data/sources/npay-notice.json",
-   "fetched_at": "2026-11-11T01:14:13+09:00",
+   "fetched_at": "2026-11-11T06:06:53+09:00",
    "ok": true,
    "count": 21
   },
@@ -36,7 +36,7 @@
    "type": "static",
    "url": "https://bridge.swalletevent.com/",
    "file": "https://raw.githubusercontent.com/daejuyuk/wallet-events/main/data/sources/samsung-wallet-naver.json",
-   "fetched_at": "2026-11-11T01:14:55+09:00",
+   "fetched_at": "2026-11-11T06:07:33+09:00",
    "ok": true,
    "count": 1
   },
@@ -49,7 +49,7 @@
    "type": "kbcard",
    "url": "https://card.kbcard.com/BON/DVIEW/HBBMCXCRVNEC0001",
    "file": "https://raw.githubusercontent.com/daejuyuk/wallet-events/main/data/sources/kbcard.json",
-   "fetched_at": "2026-11-11T01:14:57+09:00",
+   "fetched_at": "2026-11-11T06:07:36+09:00",
    "ok": true,
    "count": 124
   },
@@ -61,7 +61,7 @@
    "type": "static",
    "url": "https://www.inicis.com/blog/archives/16302",
    "file": "https://raw.githubusercontent.com/daejuyuk/wallet-events/main/data/sources/installments-inicis.json",
-   "fetched_at": "2026-11-11T01:19:06+09:00",
+   "fetched_at": "2026-11-11T06:11:49+09:00",
    "ok": true,
    "count": 1
   },
@@ -73,7 +73,7 @@
    "type": "render",
    "url": "https://pc.wooricard.com/dcpc/yh1/bnf/bnf02/prgevnt/H1BNF202S00.do",
    "file": "https://raw.githubusercontent.com/daejuyuk/wallet-events/main/data/sources/wooricard.json",
-   "fetched_at": "2026-11-11T01:19:08+09:00",
+   "fetched_at": "2026-11-11T06:11:51+09:00",
    "ok": true,
    "count": 1
   },
@@ -85,11 +85,11 @@
    "type": "render",
    "url": "https://card.nonghyup.com/servlet/IPCB010501.menu",
    "file": "https://raw.githubusercontent.com/daejuyuk/wallet-events/main/data/sources/nhcard.json",
-   "fetched_at": "2026-11-11T01:19:21+09:00",
+   "fetched_at": "2026-11-11T06:12:04+09:00",
    "ok": false,
    "count": 0,
    "error": "Error: Page.evaluate: TypeError: Cannot read properties of null (reading 'appendChild')\n    at eval (eval at evaluate (:234:30), <anonymous>:2:55)\n    at UtilityScript.evaluate (<anonymous>:241:19)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
   }
  ],
- "finished_at": "2026-11-11T01:19:28+09:00"
+ "finished_at": "2026-11-11T06:12:11+09:00"
 }
