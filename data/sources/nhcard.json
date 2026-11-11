@@ -6,7 +6,7 @@
  "type": "render",
  "url": "https://card.nonghyup.com/servlet/IPCB010501.menu",
  "file": "https://raw.githubusercontent.com/daejuyuk/wallet-events/main/data/sources/nhcard.json",
- "fetched_at": "2026-11-11T06:12:04+09:00",
+ "fetched_at": "2026-11-12T06:45:36+09:00",
  "ok": false,
  "count": 0,
  "error": "Error: Page.evaluate: TypeError: Cannot read properties of null (reading 'appendChild')\n    at eval (eval at evaluate (:234:30), <anonymous>:2:55)\n    at UtilityScript.evaluate (<anonymous>:241:19)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)",
