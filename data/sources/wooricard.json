@@ -6,7 +6,7 @@
  "type": "render",
  "url": "https://pc.wooricard.com/dcpc/yh1/bnf/bnf02/prgevnt/H1BNF202S00.do",
  "file": "https://raw.githubusercontent.com/daejuyuk/wallet-events/main/data/sources/wooricard.json",
- "fetched_at": "2026-11-12T06:45:24+09:00",
+ "fetched_at": "2026-11-13T06:44:57+09:00",
  "ok": true,
  "count": 1,
  "items": [
