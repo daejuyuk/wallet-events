@@ -9,7 +9,7 @@
  "type": "static",
  "url": "https://bridge.swalletevent.com/",
  "file": "https://raw.githubusercontent.com/daejuyuk/wallet-events/main/data/sources/samsung-wallet-naver.json",
- "fetched_at": "2026-11-25T08:43:10+09:00",
+ "fetched_at": "2026-11-26T08:26:37+09:00",
  "ok": true,
  "count": 1,
  "items": [
